@@ -19,7 +19,7 @@ const Characters: React.FC = () => {
     api //jogamos a requisição para o arquivo api
       .get("/characters") // aqui é colocada a requisição da Core Entity Representations, de onde virão os dados
       .then((response) => {
-        setCharacters(response.data.data.results); // seta a resposta na const characters fazendo o destruction(desempacotamento) e alterando o estado da variavel characters
+        setCharacters(response.data.data.results); // seta a resposta na const characters fazendo o destruction(desempacotamento) e alterando o estado da variável characters
       })
       .catch((err) => console.log(err));
   }, []);

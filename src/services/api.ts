@@ -9,16 +9,16 @@ const privateKey = "7288eb8f9cac637156cb1169b3bd79a2943a6108"; // 2 chaves gerad
 const timeStamp = Number(new Date()); // Number() convert a data atual gerada  - new Data() - em Números "13483891923919" ao invés de "23-11-2022", para serem usados no timeStamp solicitado pela API no site da Marvel
 const hash = md5(timeStamp + privateKey + publicKey); // hash - a md5 digest of the ts parameter, your private key and your public key (e.g. md5(ts+privateKey+publicKey)
 
-const api = axios.create({  // CONSTANTE GENÉRICA COM A URL BASE E SEUS PARAMS!!!!!
+const api = axios.create({
+  // CONSTANTE GENÉRICA COM A URL BASE E SEUS PARAMS!!!!!
   baseURL: "http://gateway.marvel.com/v1/public/",
-  params: {   //get(`${baseURL}ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&offset=0&limit=100`)
+  params: {
+    //get(`${baseURL}ts=${timeStamp}&apikey=${publicKey}&hash=${hash}&offset=0&limit=100`)
     ts: timeStamp,
     apikey: publicKey,
     hash: hash,
-    offset:0 , // importante verificar se a api fornece o offset e o limit, para retornar mais dados.
+    offset: 0, // importante verificar se a api fornece o offset e o limit, para retornar mais dados.
     limit: 30,
   },
 }); // FOI REFERENCIADO O ARQUIVO DA REQUISIÇÃO PARA api.ts e inserido const api = axios.creat(baseURL, params), para que seja exportada para o index.tsx, na pasta Characters. Fazendo assim uma requisição genérica que pode ser aproveitada quando criada novas "pages" de assuntos diferentes de characters
 export default api; // disponibilia a importação para outros arquivos.
-
-

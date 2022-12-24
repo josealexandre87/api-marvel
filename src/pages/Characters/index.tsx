@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 import api from "../../services/api"; //import da api do arquivo api (genérico)
-import { Container, CardList, Card } from "./styles"; // import do estilo no arquivo ./Characters/styles.ts
+import { Container, CardList, Card, ButtonMore } from "./styles"; // import do estilo no arquivo ./Characters/styles.ts
 
 interface ResponseData {
   // no typescript temos que dizer o tipo e criamos um tipo para informar ao useState() // Esse tipo indica os ATRIBUTOS/DADOS que serão extraidos do .then((response => setCharacters(response.data.data.results))!
@@ -19,25 +20,44 @@ const Characters: React.FC = () => {
     api //jogamos a requisição para o arquivo api
       .get("/characters") // aqui é colocada a requisição da Core Entity Representations, de onde virão os dados
       .then((response) => {
-        setCharacters(response.data.data.results); // seta a resposta na const characters fazendo o destruction(desempacotamento) e alterando o estado da variável characters
-      })
-      .catch((err) => console.log(err));
+        setCharacters(response.data.data.results);
+      }) // seta a resposta na const characters fazendo o destruction(desempacotamento) e alterando o estado da variável characters)
+      .catch((err) => console.log("log errro", err));
   }, []);
+
+  const handleMore = useCallback(async () => {
+    try {
+      const offset = characters.length;
+      const response = await api.get(`characters`, {
+        params: {
+          offset,
+        },
+      });
+
+      setCharacters([...characters, ...response.data.data.results]);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [characters]);
 
   return (
     <Container>
       <CardList>
-        {characters.map(characters  => {
+        {characters.map((characters) => {
           return (
             <Card key={characters.id} thumbnail={characters.thumbnail}>
               <div id="img" />
               <h2>{characters.name}</h2>
               <p>{characters.description}</p>
             </Card>
-          )
+          );
         })}
       </CardList>
-      
+      <ButtonMore onClick={handleMore}>
+        <FiChevronDown size={20} />
+        Mais
+        <FiChevronDown size={20} />
+      </ButtonMore>
     </Container>
   );
 }; // o retorno da requisição será enviado para o componente <Characters /> no arquivo App.tsx que irá renderizar - render() - na HTML.
